@@ -18,8 +18,15 @@ import { View,
               name: '',
               color: '#090C08'
           };
+
+          
       }
-     
+     // Update background color for chatscreen
+     changecolor = (newColor) => {
+     this.setState({ color: newColor });
+      };
+
+
        render() {
         
         

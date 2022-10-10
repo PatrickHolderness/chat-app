@@ -1,17 +1,27 @@
 import React, { Component } from 'react';
-import { View, Platform, KeyboardAvoidingView } from 'react-native';
-import { StyleSheet, ScrollView, Text, ImageBackground, TextInput, Button } from 'react-native';
+import { View, Platform, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { GiftedChat, Bubble, SystemMessage, Day, Time } from 'react-native-gifted-chat';
+
+const firebase = require('firebase');
+require('firebase/firestore');
 
 export default class Chat extends Component {
     
-    // CUSTOM METHODS
+    // custom methods
+
     onSend(messages = []) {
-        this.setState(previousState => ({
-            messages: GiftedChat.append(previousState.messages, messages),
-        }))
+        // !!should check to see if online before attempting to do this!!
+        const newMessage = messages[0]
+        this.referenceChatMessages.add({
+            _id: newMessage._id,
+            text: newMessage.text,
+            createdAt: newMessage.createdAt,
+            user: newMessage.user,
+            system: false,
+        })
     }
 
+    //chat bubble customisation
     renderBubble(props) {
         return (
             <Bubble
@@ -51,24 +61,56 @@ export default class Chat extends Component {
         )
     }
 
+    onCollectionUpdate = (querySnapshot) => {
+        const messages = [];
+        querySnapshot.forEach((doc) => {
+            var data = doc.data();
+            messages.push({
+                _id: data._id,
+                text: data.text,
+                createdAt: data.createdAt.toDate(),
+                user: data.user,
+                system: data.system,
+            });
+        });
+        this.setState({
+            messages,
+        });
+    };
+
 
     // LIFECYCLE 
+
     constructor() {
         super();
         this.state = {
             messages: [],
+            uid: '',
         }
+    
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyD1OBLe5ChopSlfaGp4DuFpQWKHw41tryM",
+        authDomain: "chat-app-a40a8.firebaseapp.com",
+        projectId: "chat-app-a40a8",
+        storageBucket: "chat-app-a40a8.appspot.com",
+        messagingSenderId: "804169844736",
+        appId: "1:804169844736:web:8f8751c98ea604d8d230e5",
+        measurementId: "G-BPPPG8T2DM"
+      };
+
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
     }
+    this.referenceChatMessages = firebase.firestore().collection('messages');
+    }
+
 
     render() {
         const { color } = this.props.route.params;
-
+        const { uid } = this.state;
         return (
-            // <ScrollView style={{ backgroundColor: color }}>
-            //     <View style={styles.container}>
-            //         <Text style={styles.text}>Chat Screen</Text>
-            //     </View>
-            // </ScrollView>
+           
             <View style={[styles.container, { backgroundColor: color }]}>
                 <GiftedChat
                     renderBubble={this.renderBubble.bind(this)}
@@ -78,9 +120,10 @@ export default class Chat extends Component {
                     messages={this.state.messages}
                     onSend={messages => this.onSend(messages)}
                     user={{
-                        _id: 1,
+                        _id: uid,
                     }}
                 />
+
                 {Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null}
             </View>
 
@@ -90,7 +133,63 @@ export default class Chat extends Component {
     componentDidMount() {
         let { name } = this.props.route.params;
         this.props.navigation.setOptions({ title: name });
-        this.setState({
+
+//saving for reference
+        //         this.setState({
+//             messages: [
+//                 {
+//                     _id: 1,
+//                     text: 'Hello developer',
+//                     createdAt: new Date(),
+//                     user: {
+//                         _id: 2,
+//                         name: 'React Native',
+//                         avatar: 'https://placeimg.com/140/140/any',
+//                     },
+//                 },
+//                 {
+//                     _id: 2,
+//                     text: 'This is a system message',
+//                     createdAt: new Date(),
+//                     system: true,
+//                 },
+//             ],
+//         })
+//     }
+// }
+
+
+// Check (anonymous) user authentication through firebase
+this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+    if (!user) {
+        await firebase.auth().signInAnonymously();
+    }
+
+    //update user state with currently active user data
+    this.setState({
+        uid: user.uid,
+    });
+
+    this.referenceChatMessages = firebase.firestore().collection('messages');
+
+            if (this.referenceChatMessages) {
+                this.unsubscribe = this.referenceChatMessages.orderBy('createdAt', 'desc').onSnapshot(this.onCollectionUpdate);
+            } else {
+                this.setState({
+                    messages: [
+                        {
+                            _id: 1,
+                            text: `Unable to connect to chat`,
+                            createdAt: new Date(),
+                            system: true,
+                        },
+                    ]
+                });
+            }
+        });
+
+        // Keeping this to reference avatar/system user
+        /*this.setState({
             messages: [
                 {
                     _id: 1,
@@ -102,17 +201,12 @@ export default class Chat extends Component {
                         avatar: 'https://placeimg.com/140/140/any',
                     },
                 },
-                {
-                    _id: 2,
-                    text: 'This is a system message',
-                    createdAt: new Date(),
-                    system: true,
-                },
-            ],
-        })
+        */
+    }
+    componentWillUnmount() {
+        this.unsubscribe();
     }
 }
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,

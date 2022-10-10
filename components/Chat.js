@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { View, Platform, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { GiftedChat, Bubble, SystemMessage, Day, Time } from 'react-native-gifted-chat';
 
 const firebase = require('firebase');
 require('firebase/firestore');
 
-export default class Chat extends Component {
+export default class Chat extends React.Component {
     
     // custom methods
 
     onSend(messages = []) {
-        // !!should check to see if online before attempting to do this!!
+        // requires connection 
         const newMessage = messages[0]
         this.referenceChatMessages.add({
             _id: newMessage._id,
@@ -159,13 +159,13 @@ export default class Chat extends Component {
 // }
 
 
-// Check (anonymous) user authentication through firebase
+// Check anon user auth through firebase
 this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
     if (!user) {
         await firebase.auth().signInAnonymously();
     }
 
-    //update user state with currently active user data
+    //update user state with current user data
     this.setState({
         uid: user.uid,
     });
@@ -188,20 +188,7 @@ this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
             }
         });
 
-        // Keeping this to reference avatar/system user
-        /*this.setState({
-            messages: [
-                {
-                    _id: 1,
-                    text: 'Hello developer',
-                    createdAt: new Date(),
-                    user: {
-                        _id: 2,
-                        name: 'React Native',
-                        avatar: 'https://placeimg.com/140/140/any',
-                    },
-                },
-        */
+
     }
     componentWillUnmount() {
         this.unsubscribe();

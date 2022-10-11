@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Platform, KeyboardAvoidingView, StyleSheet } from 'react-native';
-import { GiftedChat, Bubble, SystemMessage, Day, Time } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble, SystemMessage, Day, Time, InputToolbar } from 'react-native-gifted-chat';
 
 const firebase = require('firebase');
 require('firebase/firestore');
@@ -76,7 +76,10 @@ export default class Chat extends React.Component {
         this.setState({
             messages,
         });
-    };
+
+        // Sync  messages with asyncStorage (local)
+        this.saveMessages();
+    }
 
 
     // LIFECYCLE 
@@ -86,6 +89,7 @@ export default class Chat extends React.Component {
         this.state = {
             messages: [],
             uid: '',
+            isConnected: false,
         }
     
 

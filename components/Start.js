@@ -52,10 +52,10 @@ import { View,
                         <View style={styles.colorWrapper}>
                             <Text style={[styles.colorText, styles.label]}>Select Background Color:</Text>
                             <View style={styles.colors}>
-                                <TouchableOpacity style={[styles.color, styles.color1]} onPress={() => this.setState({ color: '#090C08' })} />
-                                <TouchableOpacity style={[styles.color, styles.color2]} onPress={() => this.setState({ color: '#474056' })} />
-                                <TouchableOpacity style={[styles.color, styles.color3]} onPress={() => this.setState({ color: '#8A95A5' })} />
-                                <TouchableOpacity style={[styles.color, styles.color4]} onPress={() => this.setState({ color: '#B9C6AE' })} />
+                                <TouchableOpacity style={[styles.color, styles.color1]} onPress={() => this.setState({ bgColor: '#090C08' })} />
+                                <TouchableOpacity style={[styles.color, styles.color2]} onPress={() => this.setState({ bgColor: '#474056' })} />
+                                <TouchableOpacity style={[styles.color, styles.color3]} onPress={() => this.setState({ bgColor: '#8A95A5' })} />
+                                <TouchableOpacity style={[styles.color, styles.color4]} onPress={() => this.setState({ bgColor: '#B9C6AE' })} />
                             </View>
                         </View>
                         </View>

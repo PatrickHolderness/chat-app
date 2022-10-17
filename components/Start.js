@@ -52,10 +52,26 @@ import { View,
                         <View style={styles.colorWrapper}>
                             <Text style={[styles.colorText, styles.label]}>Select Background Color:</Text>
                             <View style={styles.colors}>
-                                <TouchableOpacity style={[styles.color, styles.color1]} onPress={() => this.setState({ bgColor: '#090C08' })} />
-                                <TouchableOpacity style={[styles.color, styles.color2]} onPress={() => this.setState({ bgColor: '#474056' })} />
-                                <TouchableOpacity style={[styles.color, styles.color3]} onPress={() => this.setState({ bgColor: '#8A95A5' })} />
-                                <TouchableOpacity style={[styles.color, styles.color4]} onPress={() => this.setState({ bgColor: '#B9C6AE' })} />
+                                <TouchableOpacity style={[styles.color, styles.color1]} onPress={() => this.setState({ bgColor: '#090C08' })} 
+                                    accessible={true}
+                                    accessibilityLabel="color option: black (default)"
+                                    accessibilityHint="choose this to be the background color of your chat screen"
+                                    accessibilityRole="button" />
+                                <TouchableOpacity style={[styles.color, styles.color2]} onPress={() => this.setState({ bgColor: '#474056' })}
+                                    accessible={true}
+                                    accessibilityLabel="color option: purple"
+                                    accessibilityHint="choose this to be the background color of your chat screen"
+                                    accessibilityRole="button" /> 
+                                <TouchableOpacity style={[styles.color, styles.color3]} onPress={() => this.setState({ bgColor: '#8A95A5' })}
+                                    accessible={true}
+                                    accessibilityLabel="color option: blue"
+                                    accessibilityHint="choose this to be the background color of your chat screen"
+                                    accessibilityRole="button" /> 
+                                <TouchableOpacity style={[styles.color, styles.color4]} onPress={() => this.setState({ bgColor: '#B9C6AE' })}
+                                    accessible={true}
+                                    accessibilityLabel="color option: green"
+                                    accessibilityHint="choose this to be the background color of your chat screen"
+                                    accessibilityRole="button" />
                             </View>
                         </View>
                         </View>

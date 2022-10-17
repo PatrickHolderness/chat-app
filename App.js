@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { StatusBar } from 'expo-status-bar'
 
 // import react native gesture handler
 import 'react-native-gesture-handler';
@@ -27,13 +28,15 @@ export default class App extends Component {
                     <Stack.Screen
                         name="Start"
                         component={Start}
-                        options={{
-                            headerShown: false
-                        }}
+                         
                     />
                     <Stack.Screen
                         name="Chat"
                         component={Chat}
+                        options={{
+                            headerShown: true
+                        }}
+                    
                     />
                 </Stack.Navigator>
             </NavigationContainer>

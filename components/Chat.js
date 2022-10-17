@@ -222,7 +222,6 @@ export default class Chat extends React.Component {
 
       if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
-        firebase.firestore().settings({ experimentalForceLongPolling: true, merge:true });
     }
     this.referenceChatMessages = firebase.firestore().collection('messages');
     }

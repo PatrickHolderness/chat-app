@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connectActionSheet } from '@expo/react-native-action-sheet';
 import { StyleSheet, Text, TouchableOpacity, View, ActionSheetIOS } from 'react-native';
 import firebase from 'firebase';
-import * as Permissions from 'expo-permissions';
+// import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 
@@ -11,35 +11,40 @@ export default class CustomActions extends React.Component {
   
     //select image from library//
     pickImage = async () => {
-        const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
-
-        if (status === 'granted') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        try {
+          if (status === "granted") {
             let result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: 'Images',
-            }).catch(error => console.log(error));
-
+              mediaTypes: "Images",
+            }).catch((error) => console.log(error));
+    
             if (!result.cancelled) {
-                const imageUrl = await this.uploadImageFetch(result.uri);
-                this.props.onSend({ image: imageUrl });
+              const imageUrl = await this.uploadImageFetch(result.uri);
+              this.props.onSend({ image: imageUrl });
             }
+          }
+        } catch (error) {
+          console.log(error.message);
         }
-    }
+      };
 
-    //take photo with devices camera
-    takePhoto = async () => {
-        const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY, Permissions.CAMERA);
-
-        if (status === 'granted') {
-            let result = await ImagePicker.launchCameraAsync({
-                mediaTypes: 'Images',
-            }).catch(error => console.log(error));
-
-            if (!result.cancelled) {
-                const imageUrl = await this.uploadImageFetch(result.uri);
-                this.props.onSend({ image: imageUrl });
-            }
+// User can take a photo with device's camera
+takePhoto = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    try {
+      if (status === "granted") {
+        let result = await ImagePicker.launchCameraAsync({
+          mediaTypes: "Images",
+        }).catch((error) => console.log(error));
+        if (!result.cancelled) {
+          const imageUrl = await this.uploadImageFetch(result.uri);
+          this.props.onSend({ image: imageUrl });
         }
+      }
+    } catch (error) {
+      console.log(error.message);
     }
+  };
 
 
 
@@ -73,24 +78,28 @@ export default class CustomActions extends React.Component {
 
     
 
-   //get gps location of user
-    getLocation = async () => {
-        const { status } = await Permissions.askAsync(Permissions.LOCATION_FOREGROUND);
+   // Get GPS location of user
+  getLocation = async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    try {
+      if (status === "granted") {
+        let result = await Location.getCurrentPositionAsync({});
+        // const longitude = JSON.stringify(result.coords.longitude);
+        // const latitude = JSON.stringify(result.coords.latitude);
 
-        if (status === 'granted') {
-            let result = await Location.getCurrentPositionAsync({}).catch(err => console.log(err));
-
-            if (result) {
-                this.props.onSend({
-                    location: {
-                        longitude: result.coords.longitude,
-                        latitude: result.coords.latitude,
-                    },
-                });
-            }
+        if (result) {
+          this.props.onSend({
+            location: {
+              longitude: result.coords.longitude,
+              latitude: result.coords.latitude,
+            },
+          });
         }
+      }
+    } catch (error) {
+      console.log(error.message);
     }
-
+  };
     onActionPress = () => {
         const options = ['Choose From Library', 'Take Picture', 'Send Location', 'Cancel'];
         const cancelButtonIndex = options.length - 1;

@@ -22,6 +22,7 @@ export default class App extends Component {
   render() {
     return (
       <NavigationContainer>
+                
                 <Stack.Navigator
                     initialRouteName="Start"
                 >

@@ -1,5 +1,7 @@
 # Chat-App
 
+![BackgroundImage](https://user-images.githubusercontent.com/104070642/200298012-324aa952-abb4-44fe-abdc-19205c1b736d.png)
+
 ## Description
 
 This is a native mobile app built using React Native. The app provide users with a chat interface, as well as options to share messages, images and their location.
@@ -82,3 +84,23 @@ reader so that I can engage with a chat interface.
 - React-Native Screens
 - React Native Web
 - React Navigation
+
+ ## Contributions
+ 
+ Contributions and collaboration are an excellent way to learn and create new code. Any contributions to this project would be greatly appreciated!
+ If you have any suggestions to improve this project, please fork the repo and create a pull request. Open an issue with the tag **enhancement**. Thanks!
+ 
+ 1. Fork project
+ 2. Create your branch
+ 3. Commit changes
+ 4. Push to your branch
+ 5. Open a pull request.
+ 
+ ## Contact
+ 
+ Please feel free to contact me with any questions or advice. As a junior developer I am always open to helpful advice and learning new things. Feel free to get in touch!
+ 
+ 
+ - Patrick Holderness - patrickholderness@gmail.com
+ - Project Link - https://github.com/patrickholderness/chat-app.git
+
